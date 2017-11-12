@@ -2,7 +2,7 @@ from tqdm import tqdm
 from tqdm import trange
 from time import sleep
 from tqdm_logger import logger
-from tqdm_logger import seclog, log, atten, note
+from tqdm_logger import seclog, log, atten, note, warning
 from tqdm_logger.ansistyle import stylize, fg, bg, attr, RESET
 
 def test_main():
@@ -17,6 +17,8 @@ def test_main():
         for i in range(10):
             seclog(['Graph', 'blue'], 123)
             seclog(['Graph', 'blue'])
+            warning('this is a warning\nsomething wrong')
+            log('multiline logging:\nthis is a multiline string')
             log(note('hao', 123))
             sleep(0.2)
             tbar.update(1)

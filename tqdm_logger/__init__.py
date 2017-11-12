@@ -21,28 +21,35 @@ logging.basicConfig(format='{asctime} - {message}',
                     level=logging.INFO,
                     stream=DummyTqdmFile(sys.stderr)
                     )
-
 logger = logging.getLogger('root')
+
 
 def atten(*args):
     return stylize(' '.join(str(x) for x in args), fg('red'), attr('bold'))
+
 
 def note(*args):
     return stylize(' '.join(str(x) for x in args), fg('yellow'),
                    attr('underlined'))
 
-def log(*args, attrs=None):
+
+def log(*args, attrs=None, prefix=None):
     msg = ' '.join(str(x) for x in args)
     if attrs and len(attrs):
         styles = (attr(s) for s in attrs)
         msg = stylize(msg, *styles)
-    logger.warning(msg)
+    for line in msg.split('\n'):
+        if prefix:
+            line = f'{prefix} {line}'
+        logger.warning(line)
+
 
 def seclog(section, *args, attrs=None):
     if type(section) is list or type(section) is tuple:
         section, color = section
         section = '{}[{}]{}'.format(fg(color), section, RESET)
-    log(section, *args, attrs=attrs)
+    log(*args, attrs=attrs, prefix=section)
+
 
 def warning(*args):
     seclog(atten('[Warning]'), *args)
