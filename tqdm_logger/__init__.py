@@ -21,6 +21,7 @@ class DummyTqdmFile:
         self._updating = False
         self.tmp_cnt = 0
         self.line_cnt = 0
+        self.open_bar = None
 
     def updating(self):
         self.tmp_cnt = 0
@@ -30,22 +31,38 @@ class DummyTqdmFile:
         self._updating = False
         self.line_cnt = self.tmp_cnt
 
-    def reset(self):
+    def flush(self):
         self.line_cnt = 0
 
     def write(self, msg):
         cols = _get_cols()
         msg = msg.ljust(cols)
+
+        tqdm_instances = getattr(tqdm, '_instances', [])
+        # find the most outer instance
+        outer_bar = None
+        pos = len(tqdm_instances)
+        for inst in tqdm_instances:
+            if abs(inst.pos) <= pos:
+                outer_bar = inst
+
+        # check if the previous open instance is closed.
+        if self.open_bar is not None:
+            if self.open_bar not in tqdm_instances:
+                self.line_cnt = 0
+        self.open_bar = outer_bar
+
+        # record line count if we are printing refreshable messages
         if self._updating:
             self.tmp_cnt += msg.count('\n')
             if self.line_cnt > 0:
                 msg = DummyTqdmFile.MOVE_UP * self.line_cnt + msg
         self.line_cnt = 0
-        if '_instances' not in tqdm.__dict__ or len(tqdm._instances) == 0:
+        if len(tqdm_instances) == 0:
             self.fobj.write(msg)
         elif len(msg.rstrip()) > 0:
             tqdm.write(msg, file=self.fobj)
-            self.fobj.flush()
+        self.fobj.flush()
 
 
 _output_fp = DummyTqdmFile(sys.stderr)
@@ -75,8 +92,8 @@ def section_prefix(text, color=None):
         return '{}[{}]{}'.format(fg(color), text, RESET)
 
 
-def reset():
-    _output_fp.reset()
+def flush():
+    _output_fp.flush()
 
 
 def log(*args, attrs=None, prefix=None, update=False):

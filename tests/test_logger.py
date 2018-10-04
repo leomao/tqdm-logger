@@ -31,13 +31,20 @@ def test_main():
         logger.seclog(['Testing', 'red'], 'TEST: {}'.format(ha), update=True)
         sleep(0.2)
 
-    # if use multiple updating log
-    logger.reset()
     for i in trange(10):
         ha = 'ha' * (9 - i)
         value = random.random()
         logger.seclog(['Multiline', 'yellow'],
                       'something: {}\ncool: {}'.format(ha, value), update=True)
+        sleep(0.2)
+
+    for i in trange(10):
+        ha = 'ha' * (9 - i)
+        value = random.random()
+        logger.seclog(['Multiline', 'yellow'],
+                      'something: {}\ncool: {}'.format(ha, value), update=True)
+        if (i % 3) == 0:
+            logger.flush()
         sleep(0.2)
 
 
