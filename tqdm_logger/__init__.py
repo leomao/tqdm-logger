@@ -58,9 +58,7 @@ class DummyTqdmFile:
             if self.line_cnt > 0:
                 msg = DummyTqdmFile.MOVE_UP * self.line_cnt + msg
         self.line_cnt = 0
-        if len(tqdm_instances) == 0:
-            self.fobj.write(msg)
-        elif len(msg.rstrip()) > 0:
+        if len(msg.rstrip()) > 0:
             tqdm.write(msg, file=self.fobj)
         self.fobj.flush()
 
