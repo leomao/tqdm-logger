@@ -1,4 +1,4 @@
-import os
+import shutil
 import sys
 import logging
 from collections.abc import Sequence
@@ -10,7 +10,7 @@ from .ansistyle import stylize, fg, bg, attr, RESET
 
 
 def _get_cols():
-    return os.get_terminal_size().columns
+    return shutil.get_terminal_size().columns
 
 
 class DummyTqdmFile:
