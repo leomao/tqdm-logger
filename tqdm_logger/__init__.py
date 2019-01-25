@@ -35,9 +35,6 @@ class DummyTqdmFile:
         self.line_cnt = 0
 
     def write(self, msg):
-        cols = _get_cols()
-        msg = msg.ljust(cols)
-
         tqdm_instances = getattr(tqdm, '_instances', [])
         # find the most outer instance
         outer_bar = None
@@ -57,6 +54,10 @@ class DummyTqdmFile:
             self.tmp_cnt += msg.count('\n')
             if self.line_cnt > 0:
                 msg = DummyTqdmFile.MOVE_UP * self.line_cnt + msg
+
+        cols = _get_cols()
+        msg = msg.rstrip().ljust(cols)
+
         self.line_cnt = 0
         if len(msg.rstrip()) > 0:
             tqdm.write(msg, file=self.fobj)
