@@ -5,4 +5,4 @@ setup(name='tqdm_logger',
       install_requires=[
           'tqdm >= 4.26.0',
       ]
-)  
+)
