@@ -97,7 +97,7 @@ def flush():
 
 def log(*args, attrs=None, prefix=None, update=False):
     msg = ' '.join(str(x) for x in args)
-    if attrs and len(attrs):
+    if attrs:
         styles = (attr(s) for s in attrs)
         msg = stylize(msg, *styles)
 
@@ -135,5 +135,4 @@ __all__ = [
     'seclog',
     'warning',
     'logger',
-    'reset',
 ]
