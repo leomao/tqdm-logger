@@ -1,6 +1,7 @@
 import shutil
 import sys
 import logging
+import datetime
 from collections.abc import Sequence
 
 # must import before import tqdm
@@ -59,20 +60,58 @@ class DummyTqdmFile:
         msg = msg.rstrip().ljust(cols)
 
         self.line_cnt = 0
-        if len(msg.rstrip()) > 0:
+        if msg.rstrip():
             tqdm.write(msg, file=self.fobj)
         self.fobj.flush()
 
 
+class Formatter(logging.Formatter):
+    def __init__(self):
+        super().__init__(fmt='{asctime} Δ {timedelta} - {message}',
+                         datefmt='%H:%M:%S',
+                         style='{')
+        self._high_precision = False
+
+    def set_time_mode(self, mode='both'):
+        if mode == 'delta':
+            self._fmt = '{timedelta} - {message}'
+        elif mode == 'time':
+            self._fmt = '{asctime} - {message}'
+        elif mode == 'both':
+            self._fmt = '{asctime} Δ {timedelta} - {message}'
+
+    def set_high_precision(self, flag):
+        self._high_precision = flag
+
+    def format_timedelta(self, delta):
+        if self._high_precision:
+            delta = datetime.timedelta(milliseconds=delta)
+        else:
+            delta = datetime.timedelta(seconds=int(delta / 1000))
+        return str(delta)
+
+    def format(self, record):
+        record.timedelta = self.format_timedelta(record.relativeCreated)
+        return super().format(record)
+
+
 _output_fp = DummyTqdmFile(sys.stderr)
+_formatter = Formatter()
+
+_handler = logging.StreamHandler(_output_fp)
+_handler.setFormatter(_formatter)
+_handler.setLevel(logging.INFO)
+
+logger = logging.getLogger()
+logger.addHandler(_handler)
 
 
-logging.basicConfig(format='{asctime} - {message}',
-                    datefmt='%H:%M:%S',
-                    style='{',
-                    level=logging.INFO,
-                    stream=_output_fp)
-logger = logging.getLogger('root')
+def set_high_precision(flag=True):
+    _formatter.set_high_precision(flag)
+
+
+def set_time_mode(mode='time'):
+    _formatter.set_time_mode(mode)
 
 
 def atten(*args):
@@ -135,4 +174,6 @@ __all__ = [
     'seclog',
     'warning',
     'logger',
+    'set_high_precision',
+    'set_time_mode',
 ]
