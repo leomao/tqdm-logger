@@ -67,18 +67,21 @@ class DummyTqdmFile:
 
 class Formatter(logging.Formatter):
     def __init__(self):
-        super().__init__(fmt='{asctime} Δ {timedelta} - {message}',
+        super().__init__(fmt=None,
                          datefmt='%H:%M:%S',
                          style='{')
         self._high_precision = False
+        self.set_time_mode()
 
     def set_time_mode(self, mode='both'):
         if mode == 'delta':
-            self._fmt = '{timedelta} - {message}'
+            self._fmt = 'Δ {timedelta} - {message}'
         elif mode == 'time':
             self._fmt = '{asctime} - {message}'
         elif mode == 'both':
             self._fmt = '{asctime} Δ {timedelta} - {message}'
+        # hack the formatter internal implementation
+        self._style._fmt = self._fmt
 
     def set_high_precision(self, flag):
         self._high_precision = flag

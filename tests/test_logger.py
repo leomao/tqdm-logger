@@ -29,10 +29,14 @@ def test_main():
             sleep(0.2)
             tbar.update(1)
 
+    logger.set_high_precision(True)
+
     for i in trange(10):
         ha = 'ha' * (9 - i)
         logger.seclog(['Testing', 'red'], 'TEST: {}'.format(ha), update=True)
         sleep(0.2)
+
+    logger.set_time_mode('time')
 
     for i in trange(10):
         ha = 'ha' * (9 - i)
@@ -40,6 +44,8 @@ def test_main():
         logger.seclog(['Multiline', 'yellow'],
                       'something: {}\ncool: {}'.format(ha, value), update=True)
         sleep(0.2)
+
+    logger.set_time_mode('delta')
 
     for i in trange(10):
         ha = 'ha' * (9 - i)
