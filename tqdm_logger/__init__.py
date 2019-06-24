@@ -3,6 +3,7 @@ import sys
 import logging
 import datetime
 from collections.abc import Sequence
+from contextlib import contextmanager
 
 # must import before import tqdm
 import tqdm._utils as tqdm_utils
@@ -117,6 +118,13 @@ def set_time_mode(mode='time'):
     _formatter.set_time_mode(mode)
 
 
+@contextmanager
+def updating():
+    _output_fp.updating()
+    yield None
+    _output_fp.updated()
+
+
 def atten(*args):
     return stylize(' '.join(str(x) for x in args), fg('red'), attr('bold'))
 
@@ -179,4 +187,5 @@ __all__ = [
     'logger',
     'set_high_precision',
     'set_time_mode',
+    'updating',
 ]

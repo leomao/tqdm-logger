@@ -56,6 +56,16 @@ def test_main():
             logger.flush()
         sleep(0.2)
 
+    for i in trange(10):
+        with logger.updating():
+            ha = 'ha' * (9 - i)
+            value = random.random()
+            logger.seclog(['Context', 'cyan'], 'something: {}'.format(ha))
+            logger.seclog(['Context', 'cyan'], 'nice: {}'.format(value))
+            sleep(0.2)
+
+
+
 
 if __name__ == '__main__':
     test_main()
