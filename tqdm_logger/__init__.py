@@ -104,9 +104,9 @@ _formatter = Formatter()
 
 _handler = logging.StreamHandler(_output_fp)
 _handler.setFormatter(_formatter)
-_handler.setLevel(logging.INFO)
 
 logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 logger.addHandler(_handler)
 
 

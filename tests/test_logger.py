@@ -9,8 +9,8 @@ from tqdm_logger.ansistyle import stylize, fg, bg, attr, RESET
 
 def test_main():
     print(stylize('TESTING', attr('underlined')))
-    logger.logger.info(stylize('TESTING', fg('green'), attr('underlined')))
-    logger.logger.info(stylize('logging', fg('red'), attr('bold')))
+    logger.logger.info(stylize('info TESTING', fg('green'), attr('underlined')))
+    logger.logger.info(stylize('info logging', fg('red'), attr('bold')))
     logger.log(stylize('TESTING', fg('green'), attr('underlined')))
     logger.log(stylize('logging', fg('red'), attr('bold')))
     for i in trange(10):
