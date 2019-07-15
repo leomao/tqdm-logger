@@ -3,8 +3,8 @@
 ## Installation
 
 ```bash
-git clone https://github.com/leomao/tqdm_logger.git
-cd tqdm_logger
+git clone https://github.com/leomao/tqdm-logger.git
+cd tqdm-logger
 pip install -e . # (use --user to install to .local)
 ```
 

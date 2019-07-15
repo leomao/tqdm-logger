@@ -188,4 +188,5 @@ __all__ = [
     'set_high_precision',
     'set_time_mode',
     'updating',
+    'flush',
 ]

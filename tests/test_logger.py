@@ -2,9 +2,9 @@ import random
 from tqdm import tqdm
 from tqdm import trange
 from time import sleep
-import tqdm_logger as logger
-from tqdm_logger import seclog, log, atten, note, warning
-from tqdm_logger.ansistyle import stylize, fg, bg, attr, RESET
+import tqdmlogger as logger
+from tqdmlogger import seclog, log, atten, note, warning
+from tqdmlogger.ansistyle import stylize, fg, bg, attr, RESET
 
 
 def test_main():
